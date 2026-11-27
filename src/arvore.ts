@@ -30,12 +30,21 @@ export function montarArvore(subRedes: SubRede[]): NoSubRede[] {
 export interface LinhaArvore {
   subRede: SubRede
   nivel: number
+  ultima: boolean
+  continuacoes: boolean[]
 }
 
-// Percorre a árvore em profundidade, na ordem em que as linhas devem aparecer na tabela.
-export function achatar(nos: NoSubRede[], nivel = 0): LinhaArvore[] {
-  return nos.flatMap((no) => [
-    { subRede: no.subRede, nivel },
-    ...achatar(no.filhas, nivel + 1),
-  ])
+// Percorre a árvore em profundidade e anota, para cada linha, o que os conectores precisam desenhar.
+export function achatar(
+  nos: NoSubRede[],
+  nivel = 0,
+  continuacoes: boolean[] = [],
+): LinhaArvore[] {
+  return nos.flatMap((no, indice) => {
+    const ultima = indice === nos.length - 1
+    return [
+      { subRede: no.subRede, nivel, ultima, continuacoes },
+      ...achatar(no.filhas, nivel + 1, [...continuacoes, !ultima]),
+    ]
+  })
 }

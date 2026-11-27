@@ -3,12 +3,16 @@ import { Link, useParams } from 'react-router'
 import { api } from '../api/cliente'
 import { achatar, montarArvore } from '../arvore'
 import { BarraOcupacao } from '../components/BarraOcupacao'
+import { Cidr } from '../components/Cidr'
+import { ConectorArvore } from '../components/ConectorArvore'
+import { EsqueletoTabela, EsqueletoTitulo } from '../components/Esqueleto'
 import { useCarregar } from '../useCarregar'
 
 export function PaginaSecao() {
   const { secaoId } = useParams()
   const id = Number(secaoId)
 
+  // Hooks sempre antes de qualquer return.
   const secao = useCarregar(() => api.buscarSecao(id), [id])
   const subRedes = useCarregar(() => api.listarSubRedesDaSecao(id), [id])
 
@@ -17,8 +21,18 @@ export function PaginaSecao() {
     [subRedes.dados],
   )
 
-  if (secao.erro) return <p className="alerta" role="alert">{secao.erro}</p>
-  if (secao.carregando || subRedes.carregando) return <p className="vazio">Carregando...</p>
+  if (secao.erro) {
+    return <p className="alerta" role="alert">{secao.erro}</p>
+  }
+
+  if (secao.carregando || subRedes.carregando) {
+    return (
+      <>
+        <EsqueletoTitulo />
+        <EsqueletoTabela />
+      </>
+    )
+  }
 
   return (
     <section>
@@ -28,7 +42,9 @@ export function PaginaSecao() {
       {subRedes.erro && <p className="alerta" role="alert">{subRedes.erro}</p>}
 
       {linhas.length === 0 ? (
-        <p className="vazio">Nenhuma sub-rede cadastrada nesta seção.</p>
+        <p className="vazio">
+          Nenhuma sub-rede cadastrada nesta seção. Cadastre a primeira para começar a montar a hierarquia.
+        </p>
       ) : (
         <div className="tabela-rolagem">
           <table className="tabela">
@@ -42,38 +58,35 @@ export function PaginaSecao() {
               </tr>
             </thead>
             <tbody>
-              {linhas.map(({ subRede, nivel }) => {
-                const [rede, mascara] = subRede.cidr.split('/')
-                return (
-                  <tr key={subRede.id}>
-                    <td>
-                      <Link
-                        to={`/sub-redes/${subRede.id}`}
-                        className="cidr"
-                        style={{ paddingLeft: `${nivel * 1.25}rem` }}
-                      >
-                        {rede}
-                        <span className="cidr__mascara">/{mascara}</span>
-                      </Link>
-                    </td>
-                    <td>{subRede.descricao ?? '—'}</td>
-                    <td>
-                      {subRede.vlanNumero !== null ? (
-                        <>
-                          <span className="vlan__numero">{subRede.vlanNumero}</span>{' '}
-                          <span className="vlan__nome">{subRede.vlanNome}</span>
-                        </>
-                      ) : (
-                        '—'
-                      )}
-                    </td>
-                    <td>{subRede.vrfNome}</td>
-                    <td>
-                      <BarraOcupacao ocupacao={subRede.ocupacao} />
-                    </td>
-                  </tr>
-                )
-              })}
+              {linhas.map(({ subRede, nivel, ultima, continuacoes }) => (
+                <tr key={subRede.id}>
+                  <td className="celula-arvore">
+                    <ConectorArvore nivel={nivel} ultima={ultima} continuacoes={continuacoes} />
+                    <Link
+                      to={`/sub-redes/${subRede.id}`}
+                      className="cidr"
+                      style={{ paddingLeft: `${nivel * 1.25}rem` }}
+                    >
+                      <Cidr cidr={subRede.cidr} />
+                    </Link>
+                  </td>
+                  <td>{subRede.descricao ?? '—'}</td>
+                  <td>
+                    {subRede.vlanNumero !== null ? (
+                      <>
+                        <span className="vlan__numero">{subRede.vlanNumero}</span>{' '}
+                        <span className="vlan__nome">{subRede.vlanNome}</span>
+                      </>
+                    ) : (
+                      '—'
+                    )}
+                  </td>
+                  <td>{subRede.vrfNome}</td>
+                  <td>
+                    <BarraOcupacao ocupacao={subRede.ocupacao} />
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

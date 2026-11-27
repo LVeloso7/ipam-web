@@ -7,6 +7,7 @@ import { Cidr } from '../components/Cidr'
 import { SeloStatus } from '../components/SeloStatus'
 import { formatarData } from '../formatar'
 import { useCarregar } from '../useCarregar'
+import { Check, Copy, LocateFixed } from 'lucide-react'
 
 export function PaginaSubRede() {
   const { subRedeId } = useParams()
@@ -88,18 +89,24 @@ export function PaginaSubRede() {
       </div>
 
       <div className="bloco">
-        <div className="proximo-livre">
+         <div className="proximo-livre">
           <button type="button" className="botao" onClick={sugerirProximo}>
+            <LocateFixed size={16} aria-hidden="true" />
             Sugerir próximo IP livre
           </button>
           {proximoDestaSubRede && (
             <>
-              <output className="proximo-livre__endereco">{proximoDestaSubRede.endereco}</output>
+              <output key={proximoDestaSubRede.endereco} className="proximo-livre__endereco">
+                {proximoDestaSubRede.endereco}
+              </output>
               <button
                 type="button"
                 className="botao botao--secundario"
                 onClick={() => copiar(proximoDestaSubRede.endereco)}
               >
+                {copiado
+                  ? <Check size={16} aria-hidden="true" />
+                  : <Copy size={16} aria-hidden="true" />}
                 {copiado ? 'Copiado' : 'Copiar'}
               </button>
             </>
