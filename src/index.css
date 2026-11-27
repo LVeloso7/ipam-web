@@ -1,0 +1,493 @@
+:root {
+  --grafite: #1e2a32;
+  --aco: #5b6b78;
+  --chapa: #e7ebee;
+  --fundo: #f7f8f9;
+  --guia: #c9d1d7;
+  --incandescente: #f0a202;
+
+  --ocupacao-normal: #5b8a72;
+  --ocupacao-atencao: #d08a1e;
+  --ocupacao-critico: #b3261e;
+  --erro: #b3261e;
+
+  --fonte: 'IBM Sans Variable', system-ui, sans-serif;
+  --texto-p: 0.875rem;
+  --texto-m: 1rem;
+  --texto-g: 1.25rem;
+  --texto-xg: 1.75rem;
+
+  font-family: var(--fonte);
+  font-size: var(--texto-m);
+  line-height: 1.5;
+  color: var(--grafite);
+  background: var(--fundo);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--incandescente);
+  outline-offset: 2px;
+}
+
+/* Estrutura */
+
+.app {
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+}
+
+.topo {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.875rem 1.5rem;
+  background: var(--grafite);
+  color: var(--chapa);
+}
+
+.topo__nome {
+  font-size: var(--texto-g);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.topo__descricao {
+  font-size: var(--texto-p);
+  color: var(--guia);
+}
+
+.lateral {
+  padding: 1.25rem 0.75rem;
+  background: var(--chapa);
+  border-right: 1px solid var(--guia);
+  overflow-y: auto;
+}
+
+.painel {
+  padding: 2rem 2.5rem;
+  min-width: 0;
+}
+
+/* Barra lateral */
+
+.filtro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+  padding: 0 0.25rem;
+}
+
+.filtro__rotulo {
+  font-size: var(--texto-p);
+  font-weight: 600;
+  color: var(--aco);
+}
+
+.filtro input {
+  padding: 0.375rem 0.5rem;
+  font: inherit;
+  font-size: var(--texto-p);
+  border: 1px solid var(--guia);
+  border-radius: 4px;
+  background: white;
+}
+
+.secoes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.secao {
+  display: block;
+  padding: 0.375rem 0.625rem;
+  border-left: 3px solid transparent;
+  font-size: var(--texto-p);
+  text-decoration: none;
+}
+
+.secao:hover {
+  background: white;
+}
+
+.secao--ativa {
+  border-left-color: var(--incandescente);
+  background: white;
+  font-weight: 600;
+}
+
+/* Títulos */
+
+.titulo {
+  margin: 0;
+  font-size: var(--texto-xg);
+  font-weight: 600;
+}
+
+.subtitulo {
+  margin: 0.25rem 0 1.5rem;
+  color: var(--aco);
+}
+
+/* Tabela */
+
+.tabela-rolagem {
+  overflow-x: auto;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-p);
+}
+
+.tabela th {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--aco);
+  border-bottom: 2px solid var(--guia);
+}
+
+.tabela td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--chapa);
+  vertical-align: middle;
+}
+
+.tabela tbody tr:hover {
+  background: white;
+}
+
+.cidr {
+  display: inline-block;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cidr:hover {
+  text-decoration: underline;
+}
+
+.cidr__mascara {
+  color: var(--aco);
+  font-weight: 400;
+}
+
+.vlan__numero {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.vlan__nome {
+  color: var(--aco);
+}
+
+/* Ocupação */
+
+.ocupacao {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.625rem;
+  min-width: 10rem;
+}
+
+.ocupacao__trilho {
+  flex: 1;
+  min-width: 5rem;
+  max-width: 10rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--chapa);
+  overflow: hidden;
+}
+
+.ocupacao__preenchimento {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.ocupacao__preenchimento--normal {
+  background: var(--ocupacao-normal);
+}
+
+.ocupacao__preenchimento--atencao {
+  background: var(--ocupacao-atencao);
+}
+
+.ocupacao__preenchimento--critico {
+  background: var(--ocupacao-critico);
+}
+
+.ocupacao__percentual {
+  min-width: 3.25rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.ocupacao__detalhe {
+  flex-basis: 100%;
+  font-size: var(--texto-p);
+  color: var(--aco);
+}
+
+/* Mensagens */
+
+.vazio {
+  color: var(--aco);
+  max-width: 32rem;
+}
+
+.alerta {
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--erro);
+  background: white;
+  color: var(--erro);
+}
+
+/* Telas estreitas */
+
+@media (max-width: 48rem) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .lateral {
+    border-right: none;
+    border-bottom: 1px solid var(--guia);
+  }
+
+  .painel {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Navegação de contexto */
+
+.migalhas {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: var(--texto-p);
+  color: var(--aco);
+}
+
+.titulo--cidr {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Blocos e atributos */
+
+.bloco {
+  margin-bottom: 2.5rem;
+}
+
+.bloco__titulo {
+  margin: 0 0 0.75rem;
+  font-size: var(--texto-g);
+  font-weight: 600;
+}
+
+.atributos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2.5rem;
+  margin: 0 0 2rem;
+}
+
+.atributos dt {
+  font-size: var(--texto-p);
+  color: var(--aco);
+}
+
+.atributos dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+.numerico {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Botões */
+
+.botao {
+  padding: 0.5rem 0.875rem;
+  font: inherit;
+  font-size: var(--texto-p);
+  font-weight: 500;
+  border: 1px solid var(--grafite);
+  border-radius: 4px;
+  background: var(--grafite);
+  color: white;
+  cursor: pointer;
+}
+
+.botao:hover {
+  background: #2c3c47;
+}
+
+.botao--secundario {
+  background: white;
+  color: var(--grafite);
+}
+
+.botao--secundario:hover {
+  background: var(--chapa);
+}
+
+.proximo-livre {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.proximo-livre__endereco {
+  font-size: var(--texto-g);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Selos de status */
+
+.selo {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.selo--em_uso {
+  background: #e3efe8;
+  color: #2f5d45;
+}
+
+.selo--reservado {
+  background: #fdf0d9;
+  color: #7a4e0a;
+}
+
+.selo--dhcp {
+  background: var(--chapa);
+  color: var(--grafite);
+}
+
+/* Painel */
+
+.resumo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 3rem;
+  margin: 0 0 2.5rem;
+}
+
+.resumo div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.resumo dt {
+  font-size: var(--texto-p);
+  color: var(--aco);
+}
+
+.resumo dd {
+  margin: 0;
+  font-size: var(--texto-xg);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ocupação em destaque */
+
+.ocupacao--detalhada .ocupacao__trilho {
+  max-width: 20rem;
+  height: 0.75rem;
+}
+
+/* Busca no topo */
+
+.busca {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+  width: min(28rem, 100%);
+}
+
+.busca input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.375rem 0.625rem;
+  font: inherit;
+  font-size: var(--texto-p);
+  border: 1px solid var(--aco);
+  border-radius: 4px;
+  background: #2c3c47;
+  color: white;
+}
+
+.busca input::placeholder {
+  color: var(--guia);
+}
+
+.botao--claro {
+  border-color: var(--chapa);
+  background: var(--chapa);
+  color: var(--grafite);
+}
+
+.botao--claro:hover {
+  background: white;
+}
+
+/* Esconde da tela, mas mantém acessível para leitores de tela. */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 48rem) {
+  .topo {
+    flex-wrap: wrap;
+  }
+
+  .busca {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+}
